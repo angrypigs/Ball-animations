@@ -1,6 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from random import randint, uniform
+from math import sqrt
 import colorsys
 
 HEIGHT = 700
@@ -47,7 +48,9 @@ class App:
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                    self.balls = self.balls[0:1]
+                    temp_ball = min(self.balls, 
+                                    key = lambda x: sqrt((self.MID.x - x.coords.x) ** 2 + (self.MID.y - x.coords.y) ** 2))
+                    self.balls = [temp_ball]
             self.display.blit(self.bg, (0, 0))
             temp_balls: list[Ball] = []
             for ball in self.balls:
@@ -65,7 +68,6 @@ class App:
             self.balls.extend(temp_balls)
             if len(self.balls) > self.LIMIT:
                 self.balls = self.balls[-self.LIMIT:]
-            print(len(self.balls))
             pygame.display.flip()
             self.clock.tick(90)
             
